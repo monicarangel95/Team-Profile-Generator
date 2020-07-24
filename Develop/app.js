@@ -247,12 +247,7 @@ function appMenu() {
             }
             fs.writeFileSync(outputPath, render(teamMembers), "utf-8");
         }
-
-
     }
-
     createManager();
-
 }
-
 appMenu();
