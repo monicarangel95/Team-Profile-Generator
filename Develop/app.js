@@ -241,6 +241,13 @@ function appMenu() {
                 createTeam();
             });
         }
+        function buildTeam() {
+            if (!fs.existsSync(OUTPUT_DIR)) {
+                fs.mkdirSync(OUTPUT_DIR)
+            }
+            fs.writeFileSync(outputPath, render(teamMembers), "utf-8");
+        }
+
 
     }
 
