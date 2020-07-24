@@ -13,6 +13,7 @@ const team = [];
 const idArray = [];
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+//MANAGER CREATED//
 function appMenu() {
     function createManager() {
         console.log("Build your team");
@@ -74,7 +75,7 @@ function appMenu() {
                 message: "Please enter the number of employees you have. (Numbers only)",
                 validate: answer => {
                     const pass = answer.match(
-                        /^[1-9]\d*$/
+                        /^[1-120]\d*$/
                     );
                     if (pass) {
                         return true;
@@ -87,6 +88,30 @@ function appMenu() {
             team.push(manager);
             idArray.push(answers.managerId);
             createTeam();
+        });
+//inquirer prompts for engineer or intern
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "memberChoice",
+                message: "Which type of team member would you like to add?",
+                choices: [
+                    "Engineer",
+                    "Intern",
+                    "I don't want to add any more team members"
+                ]
+            }
+        ]).then(userChoice => {
+            switch (userChoice.memberChoice) {
+                case "Engineer":
+                    addEngineer();
+                    break;
+                case "Intern":
+                    addIntern();
+                    break;
+                default:
+                    buildTeam();
+            }
         });
 
 
