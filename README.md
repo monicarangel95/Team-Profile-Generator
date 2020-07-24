@@ -18,7 +18,7 @@
   ## Contribution
   Yes, please notify if you would like to contribute. 
   ## Test
-  undefined
+ Npm run test
   ## License
   MIT License
   Copyright (c) [2020] [Monica Rangel]
