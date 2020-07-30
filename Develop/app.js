@@ -4,250 +4,138 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-
+const employees = [];
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
-
 const render = require("./lib/htmlRenderer");
-const team = [];
-const idArray = [];
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 //MANAGER CREATED//
-function appMenu() {
-    function createManager() {
-        console.log("Build your team");
-        inquirer.prompt([
-            {
-                type: "input",
-                name: "manager",
-                message: "Manager. Please enter your name.",
-                validate: answer => {
-                    if (answer !== "") {
-                        return true;
-                    }
-                    return "Please enter at least one character.";
-                }
-            },
-            {
-                type: "input",
-                name: "managerEmail",
-                message: "Please enter your email.",
-                validate: answer => {
-                    const pass = answer.match(
-                        /\S+@\S+\.\S+/
-                    );
-                    if (pass) {
-                        return true;
-                    }
-                    return "Please enter a valid email address.";
-                }
-            },
-            {
-                type: "input",
-                name: "managerId",
-                message: "Please enter your ID.",
-                validate: answer => {
-                    const pass = answer.match(
-                        /^[1-9]\d*$/
-                    );
-                    if (pass) {
-                        return true;
-                    }
-                    return "Please enter a positive number greater than zero.";
-                }
-            },
-            {
-                type: "input",
-                name: "managerPhone",
-                message: "Please enter your phone number.",
-                validate: answer => {
-                    if (answer !== "") {
-                        return true;
-                    }
-                    return "Please enter phone number.";
-                }
-            },
+const employmentType = [{
+    type: "list",
+    name: "role",
+    choices: [
+        "Manager",
+        "Intern",
+        "Engineer",
+        "Done adding staff"
+    ]
+}];
 
-            {
-                type: "number",
-                name: "teamSize",
-                message: "Please enter the number of employees you have. (Numbers only)",
-                validate: answer => {
-                    const pass = answer.match(
-                        /^[1-120]\d*$/
-                    );
-                    if (pass) {
-                        return true;
-                    }
-                    return "Please enter a positive number greater than zero.";
-                }
-            },
-        ]).then(answers => {
-            const manager = new Manager(answers.manager, answers.managerEmail, answers.managerID, answers.managerPhone, answers.teamSize);
-            team.push(manager);
-            idArray.push(answers.managerId);
-            createTeam();
-        });
-        //inquirer prompts for engineer or intern
-        inquirer.prompt([
-            {
-                type: "list",
-                name: "memberChoice",
-                message: "Which type of team member would you like to add?",
-                choices: [
-                    "Engineer",
-                    "Intern",
-                    "I don't want to add any more team members"
-                ]
-            }
-        ]).then(userChoice => {
-            switch (userChoice.memberChoice) {
-                case "Engineer":
-                    addEngineer();
-                    break;
-                case "Intern":
-                    addIntern();
-                    break;
-                default:
-                    buildTeam();
-            }
-        });
-        function addEngineer() {
-            inquirer.prompt([
-                {
-                    type: "input",
-                    name: "engineerName",
-                    message: "What is your engineer's name?",
-                    validate: answer => {
-                        if (answer !== "") {
-                            return true;
-                        }
-                        return "Please enter at least one character.";
-                    }
-                },
-                {
-                    type: "input",
-                    name: "engineerId",
-                    message: "What is your engineer's id?",
-                    validate: answer => {
-                        const pass = answer.match(
-                            /^[1-9]\d*$/
-                        );
-                        if (pass) {
-                            if (idArray.includes(answer)) {
-                                return "This ID is already taken. Try again";
-                            } else {
-                                return true;
-                            }
+const allStaffQuestions = [{
 
-                        }
-                        return "Please enter a positive number greater than zero.";
-                    }
-                },
-                {
-                    type: "input",
-                    name: "engineerEmail",
-                    message: "What is your engineer's email?",
-                    validate: answer => {
-                        const pass = answer.match(
-                            /\S+@\S+\.\S+/
-                        );
-                        if (pass) {
-                            return true;
-                        }
-                        return "Please enter a valid email address.";
-                    }
-                },
-                {
-                    type: "input",
-                    name: "engineerGithub",
-                    message: "What is your engineer's GitHub username?",
-                    validate: answer => {
-                        if (answer !== "") {
-                            return true;
-                        }
-                        return "Please enter at least one character.";
-                    }
-                }
-            ]).then(answers => {
-                const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
-                teamMembers.push(engineer);
-                idArray.push(answers.engineerId);
-                createTeam();
-            });
-        }
-        function addIntern() {
-            inquirer.prompt([
-                {
-                    type: "input",
-                    name: "internName",
-                    message: "What is your intern's name?",
-                    validate: answer => {
-                        if (answer !== "") {
-                            return true;
-                        }
-                        return "Please enter at least one character.";
-                    }
-                },
-                {
-                    type: "input",
-                    name: "internId",
-                    message: "What is your intern's id?",
-                    validate: answer => {
-                        const pass = answer.match(
-                            /^[1-9]\d*$/
-                        );
-                        if (pass) {
-                            if (idArray.includes(answer)) {
-                                return "This ID is already taken. Try again!";
-                            } else {
-                                return true;
-                            }
+    type: "input",
+    message: "What is your name?",
+    name: "name"
+},
+{
+    type: "input",
+    message: "What is your id number?",
+    name: "id"
+},
+{
+    type: "input",
+    message: "What is you email address?",
+    name: "email"
+}];
 
-                        }
-                        return "Please enter a positive number greater than zero.";
-                    }
-                },
-                {
-                    type: "input",
-                    name: "internEmail",
-                    message: "What is your intern's email?",
-                    validate: answer => {
-                        const pass = answer.match(
-                            /\S+@\S+\.\S+/
-                        );
-                        if (pass) {
-                            return true;
-                        }
-                        return "Please enter a valid email address.";
-                    }
-                },
-                {
-                    type: "input",
-                    name: "internSchool",
-                    message: "What is your intern's school?",
-                    validate: answer => {
-                        if (answer !== "") {
-                            return true;
-                        }
-                        return "Please enter at least one character.";
-                    }
-                }
-            ]).then(answers => {
-                const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
-                teamMembers.push(intern);
-                idArray.push(answers.internId);
-                createTeam();
-            });
-        }
-        function buildTeam() {
-            if (!fs.existsSync(OUTPUT_DIR)) {
-                fs.mkdirSync(OUTPUT_DIR)
+const engineerQuestion = [{
+
+    type: "input",
+    message: "What is you GitHub username?",
+    name: "github"
+}];
+
+const internQuestion = [{
+
+    type: "input",
+    message: "What School do you go to?",
+    name: "school"
+}];
+
+const managerQuestion = [{
+
+    type: "input",
+    message: "What is your office number?",
+    name: "officeNumber"
+}];
+
+function init() {
+    inquirer
+        .prompt([...employmentType]).then((data) => {
+            if (data.role === "Manager") {
+                addManager();
+            } else if (data.role === "Intern") {
+                addIntern();
+            } else if (data.role === "Engineer") {
+                addEngineer();
+            } else {
+                console.log(employees)
+                console.log("No more employee's")
+                writeToFile("./output/team.html", render(employees))
             }
-            fs.writeFileSync(outputPath, render(teamMembers), "utf-8");
-        }
-    }
-    createManager();
+        })
 }
-appMenu();
+
+function addManager() {
+    inquirer
+        .prompt([...allStaffQuestions, ...managerQuestion])
+        .then(({ name, id, email, officeNumber }) => {
+            let manager = new Manager(name, id, email, officeNumber);
+            if (name === "" && id === "" && email === "" && officeNumber === "" && !isNaN(officeNumber)) {
+                console.log("please enter the correct information");
+                addManager();
+            } else {
+                employees.push(manager);
+                init();
+            };
+
+        });
+
+};
+
+function addIntern() {
+    inquirer
+        .prompt([...allStaffQuestions, ...internQuestion])
+        .then(({ name, id, email, school }) => {
+            let intern = new Intern(name, id, email, school);
+            if (name === "" && id === "" && email === "" && school === "") {
+                console.log("please enter the correct information");
+                addIntern();
+            } else {
+                employees.push(intern);
+                init();
+
+            };
+
+        });
+};
+
+
+function addEngineer() {
+    inquirer
+        .prompt([...allStaffQuestions, ...engineerQuestion])
+        .then(({ name, id, email, github }) => {
+            let engineer = new Engineer(name, id, email, github);
+            if (name === "" && id === "" && email === "" && github === "") {
+                console.log("please enter the correct information");
+                addEngineer();
+            } else {
+                employees.push(engineer);
+                init();
+
+
+            };
+        })
+}
+
+function writeToFile(filename, data) {
+    fs.writeFile(filename, data, err => {
+        if (err) {
+            throw err;
+        }
+        console.log("Successful!!");
+    })
+}
+
+init()
