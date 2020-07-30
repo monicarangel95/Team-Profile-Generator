@@ -15,7 +15,7 @@
   - [Questions](#questions)
 
   ## Walkthrough Video
-  - https://drive.google.com/file/d/1YA89Hgh85faks0Xqxz3CiAXTgScbjxId/view
+  - https://drive.google.com/file/d/1Zsw30PQiulvjHNsgLlwvKNKX05DeyiFP/view
   ## Description
   A Node CLI that takes in information about employees and generates an HTML webpage that displays summaries for each person based on their title such as name, id, email, github, school, and office number.
   ## Installation
