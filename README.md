@@ -2,7 +2,7 @@
   # Team Profile Generator
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<img src = "./Assets/team-profile.png">
+<img src = "./Assets/team.profile.png">
   
   ## Table of Contents
   - [Walkthrough Video](#walkthrough-video)
