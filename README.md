@@ -1,7 +1,11 @@
 
   # Team Profile Generator
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+<img src = "./Assets/team-profile.png">
+  
   ## Table of Contents
+  - [Walkthrough Video](#walkthrough-video)
   - [Description](#description)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -9,6 +13,9 @@
   - [Test](#test)
   - [License](#license)
   - [Questions](#questions)
+
+  ## Walkthrough Video
+  
   ## Description
   A Node CLI that takes in information about employees and generates an HTML webpage that displays summaries for each person based on their title such as name, id, email, github, school, and office number.
   ## Installation
